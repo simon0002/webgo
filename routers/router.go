@@ -2,19 +2,25 @@ package routers
 
 import (
 	"beego/controllers"
+    //"beego/filters"
 	beego "github.com/beego/beego/v2/server/web"
 )
 
 func init() {
-    beego.Router("/", &controllers.MainController{})
+    //beego.InsertFilter("/*",beego.BeforeRouter,filters.FilterUser)
 
-    beego.Router("/abc", &controllers.MainController{}, "get:Abc")
+    beego.Router("/", &controllers.UserController{})
 
-    beego.Router("/home", &controllers.MainController{}, "get:Home")
-    beego.Router("/add", &controllers.MainController{}, "get:Add")
-    beego.Router("/save", &controllers.MainController{}, "post:Save")
+    beego.Router("/login", &controllers.LoginController{}, "get:Login")
+    beego.Router("/dologin", &controllers.LoginController{}, "post:DoLogin")
+
+    beego.Router("/abc", &controllers.UserController{}, "get:Abc")
+
+    beego.Router("/home", &controllers.UserController{}, "get:Home")
+    beego.Router("/add", &controllers.UserController{}, "get:Add")
+    beego.Router("/save", &controllers.UserController{}, "post:Save")
 
 
-    beego.Router("/test", &controllers.MainController{}, "get:Test")
-    beego.Router("/testDefer", &controllers.MainController{}, "get:TestDefer")
+    beego.Router("/test", &controllers.UserController{}, "get:Test")
+    beego.Router("/testDefer", &controllers.UserController{}, "get:TestDefer")
 }

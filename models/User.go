@@ -50,6 +50,7 @@ func List() []*User{
     o := orm.NewOrm()
     var user User
     var users []*User
+    //users := o.Raw("SELECT * FROM user")
     o.QueryTable(user).All(&users)
     //num, err := o.QueryTable(user).All(&users)
     //fmt.Printf("Returned Rows Num: %s, %s", num, err)
@@ -62,4 +63,12 @@ func Save(user *User) int64{
     o := orm.NewOrm()
     id, _ := o.Insert(user)
     return id
+}
+
+func GetByName(username string) (User,error){
+    o := orm.NewOrm()
+    var user User
+    err := o.QueryTable(user).Filter("Username", username).One(&user)
+
+    return user, err
 }
