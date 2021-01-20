@@ -23,7 +23,7 @@ func (c *LoginController) DoLogin() {
 	password := c.GetString("password")
 
 	//user := models.User{Username:username, Password:password}
-	user, err := models.GetByName(username)
+	user, err := models.UserGetByName(username)
 	//fmt.Println(user)
 	if(err != nil){
 		fmt.Println(err)

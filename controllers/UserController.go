@@ -8,6 +8,7 @@ import (
 	//"io/ioutil"
 	"os"
 	//"github.com/astaxie/beego/context"
+	"beego/utils"
 )
 
 type UserController struct {
@@ -23,20 +24,37 @@ func (c *UserController) Get() {
 }
 
 func (c *UserController) Abc() {
-	c.Data["Website"] = "beego.me.abc"
-	c.Data["Email"] = "astaxieabc@gmail.com"
-	c.TplName = "index.tpl"
+	// c.Data["Website"] = "beego.me.abc"
+	// c.Data["Email"] = "astaxieabc@gmail.com"
+	// c.TplName = "index.tpl"
 
 	//this.Ctx.WriteString("hello")
+
+	//返回json
+	users := models.UserList(0, 10)
+	c.Data["json"] = utils.Response{Code:0, Data:users, Msg:""}
+
+	c.ServeJSON()
 }
 
 func (c *UserController) Home() {
-	c.Data["Users"] = models.List()
+	pnum,err := c.GetInt("p")
+	if(err != nil){
+		pnum = 1
+	}
+
+	//列表分页
+	psize := 1
+	offset := (pnum-1)*psize
+
+	count := models.UserCount()
+	c.Data["paginator"] = utils.NewPaginator(c.Ctx.Request, psize, count)
+	c.Data["Users"] = models.UserList(offset, psize)
 	c.TplName = "home.html"
 }
 
 func (c *UserController) Add() {
-	//c.Data["Users"] = models.List()
+
 	c.TplName = "add.html"
 }
 
@@ -46,7 +64,7 @@ func (c *UserController) Save() {
 	email := c.GetString("email")
 
 	user := models.User{Username:username, Password:password, Email:email}
-	models.Save(&user)
+	models.UserSave(&user)
 
 	c.Ctx.WriteString("hello")
 }
