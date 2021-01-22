@@ -11,10 +11,11 @@ import (
 type User struct {
     BaseModel
 
-    Id   int
-    Username string 
-    Password string 
-    Email string 
+    Id          int
+    Username    string 
+    Password    string 
+    Email       string 
+    Avatar      string 
 }
 
 func init() {
@@ -79,4 +80,10 @@ func UserCount() int64{
     count,_ := o.QueryTable(user).Count()
     //fmt.Println(count)
     return count
+}
+
+func UserUpdate(user *User) int64{
+    o := orm.NewOrm()
+    id, _ := o.Insert(user)
+    return id
 }

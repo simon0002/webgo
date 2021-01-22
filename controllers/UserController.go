@@ -7,6 +7,7 @@ import (
 	"time"
 	//"io/ioutil"
 	"os"
+	"net/http"
 	//"github.com/astaxie/beego/context"
 	"beego/utils"
 )
@@ -67,6 +68,31 @@ func (c *UserController) Save() {
 	models.UserSave(&user)
 
 	c.Ctx.WriteString("hello")
+}
+
+func (c *UserController) UpdateAvatar() {
+	f, h, err := c.GetFile("avatar");
+	if err == http.ErrMissingFile {
+		c.Data["json"] = utils.Response{Code:1002, Data:nil, Msg:"请选择文件"}
+		c.ServeJSON()
+	}
+
+	defer f.Close()
+
+	if err != nil {
+		c.Data["json"] = utils.Response{Code:1002, Data:nil, Msg:"上传失败"}
+		c.ServeJSON()
+	} else {
+		c.SaveToFile("avatar", "upload/"+h.Filename)
+ 		//var user models.User = c.GetSession("user")
+ 		//fmt.Println(user)
+
+		// user.Avatar = "upload/" + h.Filename
+        // models.UserUpdate(&user)
+
+    	c.Data["json"] = utils.Response{Code:1002, Data:nil, Msg:"上传成功"}
+		c.ServeJSON()
+	}
 }
 
 

@@ -19,6 +19,7 @@ func init() {
     beego.Router("/home", &controllers.UserController{}, "get:Home")
     beego.Router("/add", &controllers.UserController{}, "get:Add")
     beego.Router("/save", &controllers.UserController{}, "post:Save")
+    beego.Router("/avatar", &controllers.UserController{}, "post:UpdateAvatar")
 
 
     beego.Router("/test", &controllers.UserController{}, "get:Test")

@@ -37,7 +37,7 @@ func (c *LoginController) DoLogin() {
 	}
 
 	//登陆成功
-	c.SetSession("user", user)
+	c.SetSession("user", user.Id)
 	//session := c.GetSession("user")
 	//fmt.Println(session)
 	c.Ctx.WriteString("ok")
