@@ -51,7 +51,7 @@ func UserList(offset int, limit int) []*User{
     o := orm.NewOrm()
     var user User
     var users []*User
-    //users := o.Raw("SELECT * FROM user")
+    //o.Raw("SELECT * FROM user").QueryRow(&users)
     o.QueryTable(user).Limit(limit, offset).All(&users)
     //num, err := o.QueryTable(user).All(&users)
     //fmt.Printf("Returned Rows Num: %s, %s", num, err)

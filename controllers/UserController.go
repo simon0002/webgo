@@ -10,6 +10,7 @@ import (
 	"net/http"
 	//"github.com/astaxie/beego/context"
 	"beego/utils"
+	 "github.com/astaxie/beego/validation"
 )
 
 type UserController struct {
@@ -63,6 +64,24 @@ func (c *UserController) Save() {
 	username := c.GetString("username")
 	password := c.GetString("password")
 	email := c.GetString("email")
+
+	//表单验证
+	valid := validation.Validation{}
+    valid.Required(username, "username").Message("请输入账号")
+    valid.Required(password, "password").Message("请输入密码")
+    valid.MinSize(email, 5, "email").Message("email太短")
+
+    if valid.HasErrors() {
+        // 如果有错误信息，证明验证没通过
+        message := ""
+        for _, err := range valid.Errors {
+            fmt.Println(err.Key, err.Message)
+            message += err.Message + "__"
+        }
+		c.Data["json"] = utils.Response{Code:1002, Data:nil, Msg:message}
+		c.ServeJSON()
+
+    }
 
 	user := models.User{Username:username, Password:password, Email:email}
 	models.UserSave(&user)
